@@ -55,3 +55,9 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Output files
+*.txt
+
+# Pickle files
+*.pkl
