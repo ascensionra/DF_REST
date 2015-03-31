@@ -100,11 +100,16 @@ occurrences to produce a tally of hits for that field """
 		return
 	return newDict
 
-def printDict(dictionary):
-	""" Prints out the contents of a dictionary in a nice format """
+def printDict(dictionary,sortVal):
+	""" Prints out the contents of a dictionary in a nice format using OrderedDict from collections to sort the dict"""
+	from collections import OrderedDict as OD
 	try:
-		for key in dictionary:
-			print '%s: %s' % (key,dictionary[key])
+		if (sortVal.upper() == 'K' or sortVal.upper() == 'KEY'):
+			orderedDict = OD(sorted(dictionary.items(), key = lambda t: t[0]))
+		else:
+			orderedDict = OD(sorted(dictionary.items(), key = lambda t: t[1], reverse=True))
+		for key in orderedDict:
+			print '%s: %s' % (key,orderedDict[key])
 	except BaseException,e:
 		print 'Unexpected error: %s' % (e)
 
