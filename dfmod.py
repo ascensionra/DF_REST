@@ -21,7 +21,7 @@ token, and returns the request response """
 
 def delToken(url,header):
 	""" Sends DELETE request to remove the session token from DF, 
-removes token from header, and returns reuest response """
+removes token from header, and returns request response """
 	try:
 		r=requests.delete(url,headers=header)
 		del header['X-DreamFactory-Session-Token']
@@ -50,7 +50,7 @@ def newGetRequest(url,header):
 def newPutRequest(url,header):
 	""" Submits PUT request and returns response """
 	try:
-		r=requests.get(url,headers=header)
+		r=requests.put(url,headers=header)
 	except requests.exceptions.RequestException,e:
 		print 'Your request failed: %s' % (e)
 		return
@@ -79,7 +79,7 @@ response in a nice format to a file """
 		print 'Undexpected error: %s' % (e)
 	return
 
-def tallyCalls(response,field):
+def tallyRecords(response,field):
 	""" Puts unique field into dictionary and increments count on subsequent
 occurrences to produce a tally of hits for that field """
 	try:
@@ -101,15 +101,16 @@ occurrences to produce a tally of hits for that field """
 	return newDict
 
 def printDict(dictionary,sortVal):
-	""" Prints out the contents of a dictionary in a nice format using OrderedDict from collections to sort the dict"""
+	""" Prints out the contents of a dictionary in a nice format
+using OrderedDict from collections to sort the dict"""
 	from collections import OrderedDict as OD
 	try:
 		if (sortVal.upper() == 'K' or sortVal.upper() == 'KEY'):
-			orderedDict = OD(sorted(dictionary.items(), key = lambda t: t[0]))
+			ordered = OD(sorted(dictionary.items(), key = lambda t: t[0]))
 		else:
-			orderedDict = OD(sorted(dictionary.items(), key = lambda t: t[1], reverse=True))
-		for key in orderedDict:
-			print '%s: %s' % (key,orderedDict[key])
+			ordered = OD(sorted(dictionary.items(), key = lambda t: t[1], reverse=True))
+		for key in ordered:
+			print '%s: %s' % (key,ordered[key])
 	except BaseException,e:
 		print 'Unexpected error: %s' % (e)
 
