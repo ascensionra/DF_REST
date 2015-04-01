@@ -58,6 +58,28 @@ def newPutRequest(url,header):
 		print 'Unexpected error: %s' % (e)
 	return r
 
+def newPostRequest(url,header):
+	""" Submits POST request and returns response """
+	try:
+		r=requests.post(url,headers=header)
+	except requests.exceptions.RequestException,e:
+		print 'Your request failed: %s' % (e)
+		return
+	except BaseException,e:
+		print 'Unexpected error: %s' % (e)
+	return r
+
+def newPostRequestParams(url,header,parameters):
+	""" Submits POST request with paramters and returns response """
+	try:
+		r=requests.post(url,headers=header,data=json.dumps(parameters))
+	except requests.exceptions.RequestException,e:
+		print 'Your request failed: %s' % (e)
+		return
+	except BaseException,e:
+		print 'Unexpected error: %s' % (e)
+	return r
+
 def printJson(response):
 	""" Prints JSON dictionary of a successful 
 response in a nice format """
@@ -81,7 +103,8 @@ response in a nice format to a file """
 
 def tallyRecords(response,field):
 	""" Puts unique field into dictionary and increments count on subsequent
-occurrences to produce a tally of hits for that field """
+occurrences to produce a tally of hits for that field. This does not work with lists yet,
+so printing store procedures responses in array or list form will not work. """
 	try:
 		newDict = {}
 		for i in response.json()['record']:
@@ -102,7 +125,7 @@ occurrences to produce a tally of hits for that field """
 
 def printDict(dictionary,sortVal):
 	""" Prints out the contents of a dictionary in a nice format
-using OrderedDict from collections to sort the dict"""
+using OrderedDict from collections to sort the dict.""" 
 	from collections import OrderedDict as OD
 	try:
 		if (sortVal.upper() == 'K' or sortVal.upper() == 'KEY'):
