@@ -23,7 +23,7 @@ def delToken(url,header):
 	""" Sends DELETE request to remove the session token from DF, 
 removes token from header, and returns request response """
 	try:
-		r=requests.delete(url,headers=header)
+		r=requests.DELete(url,headers=header)
 		del header['X-DreamFactory-Session-Token']
 	except requests.exceptions.RequestException,e:
 		print e
@@ -41,7 +41,7 @@ def newGetRequest(url,header):
 	try:
 		r=requests.get(url,headers=header)
 	except requests.exceptions.RequestException,e:
-		print 'Your request failed: %s' % (e)
+		print 'The request failed: %s' % (e)
 		return
 	except BaseException,e:
 		print 'Unexpected error: %s' % (e)
@@ -52,7 +52,7 @@ def newPutRequest(url,header):
 	try:
 		r=requests.put(url,headers=header)
 	except requests.exceptions.RequestException,e:
-		print 'Your request failed: %s' % (e)
+		print 'The request failed: %s' % (e)
 		return
 	except BaseException,e:
 		print 'Unexpected error: %s' % (e)
@@ -63,7 +63,7 @@ def newPostRequest(url,header):
 	try:
 		r=requests.post(url,headers=header)
 	except requests.exceptions.RequestException,e:
-		print 'Your request failed: %s' % (e)
+		print 'The request failed: %s' % (e)
 		return
 	except BaseException,e:
 		print 'Unexpected error: %s' % (e)
@@ -74,7 +74,30 @@ def newPostRequestParams(url,header,parameters):
 	try:
 		r=requests.post(url,headers=header,data=json.dumps(parameters))
 	except requests.exceptions.RequestException,e:
-		print 'Your request failed: %s' % (e)
+		print 'The request failed: %s' % (e)
+		return
+	except BaseException,e:
+		print 'Unexpected error: %s' % (e)
+	return r
+
+def deleteRecordById(url,header,parameters):
+	""" Submits DELETE request to remove the records specified in paramters from 
+the database using ID field specified in the url"""
+	try:
+		r=requests.delete(url,headers=header,params=parameters)
+	except requests.exceptions.RequestException,e:
+		print 'The request failed: %s' % (e)
+		return
+	except BaseException,e:
+		print 'Unexpected error: %s' % (e)
+	return r
+
+def deleteTable(url,header):
+	""" Submits DELETE request to remote the tables specified in the url """
+	try:
+		r=requests.delete(url,headers=header)
+	except requests.exceptions.RequestException,e:
+		print 'The request failed: %s' % (e)
 		return
 	except BaseException,e:
 		print 'Unexpected error: %s' % (e)
@@ -104,7 +127,7 @@ response in a nice format to a file """
 def tallyRecords(response,field):
 	""" Puts unique field into dictionary and increments count on subsequent
 occurrences to produce a tally of hits for that field. This does not work with lists yet,
-so printing store procedures responses in array or list form will not work. """
+so tallying stored procedures responses in array or list form will not work. """
 	try:
 		newDict = {}
 		for i in response.json()['record']:
@@ -143,6 +166,20 @@ specified file, sorted."""
 	from pprint import pprint
 	try:
 		with open(filename,'w') as f:
+			pprint(dictionary,f)
+	except IOError,e:
+		print "I/O error((0)): (1)".format(e.errno, e.strerror)
+	except BaseException,e:
+		print 'Unexpected error: %s' % (e)
+	finally:
+		f.close()
+
+def appendDict(dictionary,filename):
+	""" Uses pretty print to write a dictionary's contents to
+specified file, sorted."""
+	from pprint import pprint
+	try:
+		with open(filename,'a') as f:
 			pprint(dictionary,f)
 	except IOError,e:
 		print "I/O error((0)): (1)".format(e.errno, e.strerror)
